@@ -23,8 +23,8 @@ void loop(){
   
   potVal = analogRead(potPin); //Leo el puerto analógico del potenciómetro
   
-  potValor = map(potVal, 0, 1023, 0, 255); //mapeo el rango 0-1023 a 0-255);
-  
+  potValor = map(potVal, 0, 4095, 0, 255); //mapeo el rango 0-4095 a 0-255);
+  Serial.println(potVal);
   ledcWrite(canal,potValor);
   delay(2000); //Esperamos dos segundos
   
