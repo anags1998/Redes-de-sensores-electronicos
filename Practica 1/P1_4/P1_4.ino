@@ -14,6 +14,9 @@ volatile int counter;
 float potVal = 0;
 float potValor = 0;
 
+//variable para almacenar el retraso para mostrar el valor del ADC
+int retraso = 0;
+
 //variable para almacenar el duty del PWM
 int duty = 0;
 
@@ -59,12 +62,7 @@ void setup() {
                                             //true(interrución edge triggered) o false (interrupción de level triggered)
                                             //Edge triggered: El circuito se activa en el flanco negativo o positivo de la señal del reloj.
                                             //Level triggered: El circuito se activará cuando el impulso de reloj o activación esté en un nivel particular.
-  timerAlarmWrite(tempo, 1000000, true);//Para indicar la frecuencia de interrupciones
-                                         //variable global
-                                         //el valor teniendo en cuenta el prescaler
-                                         //flag para indiciar si se vuelve a cargar el contardor cuando
-                                         //se dispara una interrupción(true) o no(false)
-  timerAlarmEnable(tempo);//habilitamos el temporizador pasando la variable como entrada
+  
  
   //Correspondiente al PWM
   ledcSetup(canal, frecuencia, resolucion); //Se configura la funcionalidad PWM
@@ -92,30 +90,36 @@ void loop(){
       potValor = potVal * (3.3/4095); // Conversión referente al ADC (4095 porque cogemos todo el rango al tener la attenuación de 11dB)
       Serial.print("El valor leido del ADC es: ");
       Serial.println(potValor);//Muestro el valor por el monitor serie
-      delay(2000);
+      TransmisionCompleta = false;  //Limpiar la bandera
     }else if (datov.indexOf("ADC(") == 0){
          datocorto = datov.substring(4,6);//Me quedo con el dato después del parentesis
          retraso = datocorto.toInt(); //Paso el dato a entero para poder tratarlo
- 
-         if (counter > 0) {
-            //Como variable counter compartida con el ISR el decrementar se hará dentro de una sección crítica
-            portENTER_CRITICAL(&tempoMux);
-            counter--; //Decrementamos para indicar que la interrupción ha sido reconocida y se va a manejar
-            portEXIT_CRITICAL(&tempoMux);
-            
-            //Acciones a realizar cada vez que ocurra la interrupción
-            potVal = analogRead(potPin); //Leo el puerto analógico del potenciómetro
-            potValor = potVal * (3.3/4095); // Conversión referente al ADC (4095 porque cogemos todo el rango al tener la attenuación de 11dB)
-            Serial.print("El valor leido del ADC es: ");
-            Serial.println(potValor);//Muestro el valor por el monitor serie
-        } 
+         if(retraso != 0){
+           timerAlarmWrite(tempo, retraso*1000000, true);//Para indicar la frecuencia de interrupciones
+                                                         //variable global
+                                                         //el valor teniendo en cuenta el prescaler
+                                                         //flag para indiciar si se vuelve a cargar el contardor cuando
+                                                         //se dispara una interrupción(true) o no(false)
+            timerAlarmEnable(tempo);//habilitamos el temporizador pasando la variable como entrada
+           if (counter > 0) {
+              //Como variable counter compartida con el ISR el decrementar se hará dentro de una sección crítica
+              portENTER_CRITICAL(&tempoMux);
+              counter--; //Decrementamos para indicar que la interrupción ha sido reconocida y se va a manejar
+              portEXIT_CRITICAL(&tempoMux);
+              
+              //Acciones a realizar cada vez que ocurra la interrupción
+              potVal = analogRead(potPin); //Leo el puerto analógico del potenciómetro
+              potValor = potVal * (3.3/4095); // Conversión referente al ADC (4095 porque cogemos todo el rango al tener la attenuación de 11dB)
+              Serial.print("El valor leido del ADC es: ");
+              Serial.println(potValor);//Muestro el valor por el monitor serie
+          } 
+        }
      }else if (datov.indexOf("PWM(") == 0){
         datocorto = datov.substring(4,5);//Me quedo con el dato después del parentesis
         duty = datocorto.toInt(); //Paso el dato a entero para poder mapearlo
         duty = map(duty, 0, 9, 0, 255); //mapeo el rango 0-9 a 0-255);
         ledcWrite(canal,duty);  //creo PWM con el duty necesario 
      }
-    //TransmisionCompleta = false;  //Limpiar la bandera
   }
   
   
