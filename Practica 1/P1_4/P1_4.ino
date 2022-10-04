@@ -117,7 +117,7 @@ void loop(){
      }else if (datov.indexOf("PWM(") == 0){
         datocorto = datov.substring(4,5);//Me quedo con el dato después del parentesis
         duty = datocorto.toInt(); //Paso el dato a entero para poder mapearlo
-        duty = map(duty, 0, 9, 0, 255); //mapeo el rango 0-9 a 0-255);
+        duty = map(duty, 0, 9, 255, 0); //mapeo el rango 0-9 a 0-255);
         ledcWrite(canal,duty);  //creo PWM con el duty necesario 
      }
   }
