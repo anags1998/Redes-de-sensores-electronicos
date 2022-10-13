@@ -10,6 +10,9 @@
 //Definimos el pin del LED
 #define LED 5
 
+//Definimos pin de muestro para comprobar muestrea datos cada 100ms
+#define MUES 17
+
 //Variables para las aceleraciones de los 3 ejes y una de tipo sensor
 MPU9250_asukiaaa mySensor;
 float aX, aY, aZ, aSqrt;
@@ -19,6 +22,7 @@ void setup() {
   Serial.begin(115200);
   pinMode(LED, OUTPUT);//Inicializamos el LED a encender
   digitalWrite(LED, HIGH);    // Apago LED
+  pinMode(MUES, OUTPUT);//Inicializamos el pin de muestreo
   
 #ifdef _ESP32_HAL_I2C_H_
   Wire.begin(SDA_PIN, SCL_PIN); //Inicializar la comunicación en los puertos
@@ -42,9 +46,7 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-
 }
-
 
 //Descripción de las dos tareas. Las tareas tienen que devolver un void y tener como argumento de entrada
 //un puntero void
@@ -64,13 +66,16 @@ void Acel( void * parameter ){
       aY = mySensor.accelY();
       aZ = mySensor.accelZ();
       aSqrt = mySensor.accelSqrt();
+      digitalWrite(MUES, HIGH); //Activamos pin de muestreo 
     } else {
       Serial.println("Cannod read accel values " + String(result));
     }
+    delay(100); //Delay para muestrear cada 100ms
+    digitalWrite(MUES, LOW);    //Apagamos pin de muestro
   }
-  Serial.println("Finalizando tarea lectura aceleracion");//Por aquí no puede pasar nunca debido al bucle infinito y 
-                                        //en caso de que lo haga me muestra que se finaliza la tarea
-                                        //y se elimina la función
+  Serial.println("Finalizando tarea lectura aceleración");//Por aquí no puede pasar nunca debido al bucle infinito y 
+                                                          //en caso de que lo haga me muestra que se finaliza la tarea
+                                                          //y se elimina la función
   vTaskDelete( NULL ); //No se puede salir de un Task mediante un return, sino hay que eliminar el Task.
 }
 
@@ -88,4 +93,8 @@ void LedYUart( void * parameter ){
     digitalWrite(LED, HIGH);    // Apago LED
     delay(1000);
   }
+  Serial.println("Finalizando tarea escritura aceleración");//Por aquí no puede pasar nunca debido al bucle infinito y 
+                                                            //en caso de que lo haga me muestra que se finaliza la tarea
+                                                            //y se elimina la función
+  vTaskDelete( NULL ); //No se puede salir de un Task mediante un return, sino hay que eliminar el Task.
 }
