@@ -88,13 +88,21 @@ void LedYUart( void * parameter ){
     Serial.println("Aceleración eje Y: " + String(aY));
     Serial.println("Aceleración eje Z: " + String(aZ));
     Serial.println("Aceleración eje media: " + String(aSqrt));
-    digitalWrite(LED, LOW);   // Enciendo LED
+    /*digitalWrite(LED, LOW);   // Enciendo LED
     delay(200);                //Espero 200ms
-    digitalWrite(LED, HIGH);    // Apago LED
+    digitalWrite(LED, HIGH);    // Apago LED*/
+    xTaskCreate(TaskLed,"TaskLed",10000,NULL,1,NULL); //Creamos tarea y matamos cuando se haga para encender y apagar el LED
     delay(1000);
   }
   Serial.println("Finalizando tarea escritura aceleración");//Por aquí no puede pasar nunca debido al bucle infinito y 
                                                             //en caso de que lo haga me muestra que se finaliza la tarea
                                                             //y se elimina la función
   vTaskDelete( NULL ); //No se puede salir de un Task mediante un return, sino hay que eliminar el Task.
+}
+
+void TaskLed( void * parameter){
+ digitalWrite(LED, LOW);   // Enciendo LED
+ delay(200);                //Espero 200ms
+ digitalWrite(LED, HIGH);    // Apago LED
+ vTaskDelete( NULL ); //Maramos la tarea del LED, para solo crearla cada vez que envíe datos por la UART
 }
