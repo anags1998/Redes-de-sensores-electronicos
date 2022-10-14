@@ -7,4 +7,4 @@ P2_1: Se trata de crear un programa que cree dos tareas, una que parpadee un LED
 
 P2_2: Se trata de implementar la tarea 5 de la práctica anterior con FREETOS.
 
-P2_3: Se trata de investifar el modo de bajo consumo utilizando FREETOS y modificar el programa anterior para dormir mientras el microcontrolados no tiene tareas que hacer.
+P2_3: Se trata de investigar el modo de bajo consumo utilizando FREETOS y modificar el programa anterior para dormir mientras el microcontrolados no tiene tareas que hacer.
