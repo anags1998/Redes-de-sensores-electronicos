@@ -11,7 +11,7 @@ P4_3: Se trata de montar un chat con una aplicación de software PC.
 
 P4_4: Se trata de sustituir el cliente por el ESP32 y enviar cada segundo la hora local.
 
-P4_5:
+P4_5: Se trata de añadir una capa de control, de tal modo que cuando se le mande "start" comienvce a mandar la hora hasta recibir "stop"
 
 P4_6:
 

@@ -21,6 +21,9 @@ char year[5];
 const IPAddress serverIP(192,168,1,130); // La dirección que desea visitar
 uint16_t serverPort = 455;         // Número de puerto del servidor
 
+String control; //Para implementar la capa de control
+String control2;
+
 WiFiClient client; // Declarar un objeto cliente para conectarse al servidor
 
 
@@ -76,16 +79,33 @@ void setup() {
   
   configTime(gmtOffset_sec, daylightOffset_sec, ntpServer); //Configuro la hora con los parametros definidos
   //printLocalTime(); //Llamo a la funcion para mostrar la hora local
-
+  
+  client.connect(serverIP, serverPort); //Me conecto al servidor mediante la IP y el puerto definido
   
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  client.connect(serverIP, serverPort); //Me conecto al servidor mediante la IP y el puerto definido
-  while(client.connected()){ //Mientras el cliente esté conectado
-    printLocalTime();//Con un delay de un segundo printeo la hora local
-    delay(1000);
+  if(client.available()){ //Compruebo que el cliente tiene datos para leer
+    char dato = client.read(); //Leo char a char
+    control += dato; //Concateno char en un String
+  }
+  control.toUpperCase(); //Paso todo a mayusculas
+  if(control.equals("START")){ //Compruebo que ha mandado un START
+    while(client.connected()){ //Mientras el cliente esté conectado
+        if(client.available()){//Compruebo que el cliente tiene datos para leer
+          char dato = client.read();//Leo char a char
+          control2 += dato;//Concateno char en un String
+        }
+        control2.toUpperCase(); //Paso a mayusculas
+        if(control2.equals("STOP")){ //Si datos = STOP paro el programa
+        return;
+        }
+        printLocalTime();//Con un delay de un segundo printeo la hora local
+        delay(1000);
+        
+        
+    }
   }
   
 
