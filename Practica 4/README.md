@@ -15,7 +15,7 @@ P4_5: Se trata de añadir una capa de control, de tal modo que cuando se le mand
 
 P4_6:
 
-P4_7:
+P4_7: Se trata de mostrar un servidor WEB que muestre la hora y tenga un botón para resetear la hora a las 00:00
 
 P4_8:
 
