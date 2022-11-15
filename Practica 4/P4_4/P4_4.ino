@@ -18,7 +18,7 @@ char minute[3];
 char seconds[3];
 char year[5];
 
-const IPAddress serverIP(192,168,1,130); // La dirección que desea visitar
+const IPAddress serverIP(192,168,0,180); // La dirección que desea visitar
 uint16_t serverPort = 455;         // Número de puerto del servidor
 
 WiFiClient client; // Declarar un objeto cliente para conectarse al servidor

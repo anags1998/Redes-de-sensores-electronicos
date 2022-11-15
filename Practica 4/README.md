@@ -13,11 +13,11 @@ P4_4: Se trata de sustituir el cliente por el ESP32 y enviar cada segundo la hor
 
 P4_5: Se trata de añadir una capa de control, de tal modo que cuando se le mande "start" comienvce a mandar la hora hasta recibir "stop"
 
-P4_6:
+P4_6: Se trata de crear un cliente TCP en la ESP32 y un servidor TCP en Python.
 
 P4_7: Se trata de mostrar un servidor WEB que muestre la hora y tenga un botón para resetear la hora a las 00:00
 
-P4_8:
+P4_8: Se trata de basándose en el estándar SENML crear un fichero json que se genere cada 10 segundos y contenga datos de temperatura inventados, las unidades y la marca temporal. Subirlos a un servidor ftp con un nombre que sea grupoXX_ddmmss.json.
 
 P4_9:
  

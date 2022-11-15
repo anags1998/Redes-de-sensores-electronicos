@@ -7,8 +7,8 @@ const char* ntpServer = "pool.ntp.org"; //Servidor NTP
 const long  gmtOffset_sec = 3600; //UTC +1.00 : 1 * 60 * 60 : 3600
 const int   daylightOffset_sec = 3600; //Desplazamiento en segundos para el horario de verano
 
-const char* ssid = "MIWIFI_5G_HunM";//Nombre de la red WIFI
-const char* password = "mJseX7mv";//Contraseña de la red WIFI
+const char* ssid = "RSense";//Nombre de la red WIFI
+const char* password = "";//Contraseña de la red WIFI
 
 //Para escribir la hora en el servidor
 String hora;
@@ -34,7 +34,6 @@ String processor(const String& var){
 
 // Reemplaza el marcador del valor de la hora por 00:00 
 String processor2(const String& var){
-  Serial.println(var);
   if(var == "HOUR"){ //Comprueba que eciste el marcador de posicion
     hora = "00:00";
     Serial.print(hora);
