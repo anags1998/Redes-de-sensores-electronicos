@@ -11,7 +11,11 @@
 //Variables para las aceleraciones de los 3 ejes y una de tipo sensor
 MPU9250_asukiaaa mySensor;
 float aX, aY, aZ, aSqrt;
-
+ 
+char sX[10];
+char sY[10];
+char sZ[10];
+char sSqrt[10];
 
 const char* ssid       = "RSense"; //Nombre de la Red WIFI
 const char* password   = "";      // Contraseña de la Red WIFI
@@ -51,13 +55,19 @@ void loop() {
   client.connect(serverIP, serverPort); //Me conecto al servidor mediante la IP y el puerto definido
   
   while(client.connected()){ //Mientras el cliente esté conectado
-    
     leerDato(); //Leo datos
-    client.write(aX); //Mando al servidor
-    client.write(aY);
-    client.write(aZ);
-    client.write(aSqrt);
-    delay(50);
+    sprintf(sX,"%f",aX);
+    sprintf(sY,"%f",aY);
+    sprintf(sZ,"%f",aZ);
+    sprintf(sSqrt,"%f",aSqrt);
+    client.write(sX); //Mando al servidor
+    client.write(", ");
+    client.write(sY);
+    client.write(", ");
+    client.write(sZ);
+    client.write(", ");
+    client.write(sSqrt);
+    client.write(", ");
  }
 }
 

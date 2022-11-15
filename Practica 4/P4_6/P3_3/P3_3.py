@@ -1,5 +1,5 @@
 import socket
- 
+import sys
 # Creo TCP/IP server
 tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
  
@@ -20,8 +20,9 @@ def main():
              
             # Receive and print data 32 bytes at a time, as long as the client is sending something
             while True:
-                data = connection.recv(64) #Recojo datos de 32 bytes en 32 bytes y printeo
-                print("Received data: {}".format(data))
+                data = connection.recv(32).decode() #Recojo datos de 32 bytes en 32 bytes y printeo
+                print(sys.getsizeof(data))
+                print(data)
                 if not data:
                     break
      
