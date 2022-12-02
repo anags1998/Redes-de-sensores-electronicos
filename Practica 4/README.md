@@ -19,5 +19,5 @@ P4_7: Se trata de mostrar un servidor WEB que muestre la hora y tenga un botón 
 
 P4_8: Se trata de basándose en el estándar SENML crear un fichero json que se genere cada 10 segundos y contenga datos de temperatura inventados, las unidades y la marca temporal. Subirlos a un servidor ftp con un nombre que sea grupoXX_ddmmss.json.
 
-P4_9:
+P4_9: Se trata de subir datos a la nube usando MQTT mediante el servicio Adafruit
  
