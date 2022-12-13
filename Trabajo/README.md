@@ -13,3 +13,8 @@ Partiendo de dicha posición, recopilando los datos de un sensor de movimiento s
 - Pirouette: girar únicamente teniendo como base una pierna estirada y la otra flexionada.
 
 ![ballet_movements](https://user-images.githubusercontent.com/113996288/207289832-f453353b-033c-454a-8935-5602edbe3862.png)
+
+Además, para poder tomar las decisiones correcta se ha realizado un análisis detallado de los distintos trabajos ya realizados en este ámbito. Posteriormente, en función de la información encontrada se han tomado las decisiones oportunas. 
+
+Link estudio del estado del arte: https://drive.google.com/file/d/1AvrKTld0K-O6-tuSzzW2uLX4LzxZXBjs/view?usp=share_link
+

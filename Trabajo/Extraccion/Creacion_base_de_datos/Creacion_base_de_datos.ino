@@ -40,7 +40,7 @@ MPU9250_asukiaaa mySensor;
 String aX, aY, aZ, gX, gY, gZ;
 String datos;
 
-const int tam = 1500;
+const int tam = 2000;
 String datosFich[tam];
 uint8_t sensorId;
 int result;
