@@ -1,9 +1,6 @@
 # RECONOCMIENTO DE MOVIMIENTOS DE BALLET
 El objetivo principal de este trabajo es identificar los distintos movimientos posibles de ballet.
 Todos ellos partirán de una posición en común, que consta de los pies juntos por los talones con las puntas hacía extremos opuestos y los brazos hacia abajo.
-
-![ballet_base](https://user-images.githubusercontent.com/113996288/207290113-8689933b-f3eb-468d-adad-0e034db4cce4.jpg)
-
 Partiendo de dicha posición, recopilando los datos de un sensor de movimiento situado en la rodilla derecha, mediante protocolos necesarios para las comunicaciones que se definirán más adelante y la algoritmia necesaria, se quiere identificar mínimo 5 de los siguientes movimientos:
 - Demi plié: ligera flexión de ambas rodillas sin mover los pies de su posición.
 - Grand plié: gran flexión de ambas rodillas únicamente levantando los talones y manteniendo los pies en el mismo lugar.
