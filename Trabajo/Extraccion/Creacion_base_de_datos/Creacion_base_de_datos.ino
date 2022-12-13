@@ -1,3 +1,4 @@
+#include "Arduino.h"
 #include <WiFi.h>
 #include <WiFiClient.h> 
 #include <ESP32_FTPClient.h>
@@ -12,14 +13,15 @@
 int lastState = HIGH; // the previous state from the input pin
 int currentState;     // the current reading from the input pin
 int i;
+
 // Definimos los pines del I2C
 #ifdef _ESP32_HAL_I2C_H_
 #define SDA_PIN 21
 #define SCL_PIN 22
 #endif
 
-const char* ssid       = "MIWIFI_5G_HunM"; //Nombre de la Red WIFI
-const char* password   = "mJseX7mv";      // Contraseña de la Red WIFI
+const char* ssid       = "RSense"; //Nombre de la Red WIFI
+const char* password   = "";      // Contraseña de la Red WIFI
 
 const char* ntpServer = "pool.ntp.org"; //Servidor NTP
 const long  gmtOffset_sec = 3600; //UTC +1.00 : 1 * 60 * 60 : 3600
@@ -37,11 +39,12 @@ ESP32_FTPClient ftp (ftp_server,ftp_user,ftp_pass, 5000, 2);
 MPU9250_asukiaaa mySensor;
 String aX, aY, aZ, gX, gY, gZ;
 String datos;
-String datosFich[2000];
+
+const int tam = 1500;
+String datosFich[tam];
 uint8_t sensorId;
 int result;
-char datosFichero[1000];
-
+char datosFichero[500];
 //Variables necesarias para mandar datos al servidor
 char fecha[50];
 String nombre = "";
@@ -87,7 +90,7 @@ void loop() {
   
   if(lastState == LOW && currentState == HIGH){
     Serial.println("The state changed from LOW to HIGH");
-    for( i = 0; i <2000 ; i++){
+    for( i = 0; i <tam ; i++){
       //Serial.println(millis());
       leerDatosSensor();
       //Serial.println(millis());
@@ -100,8 +103,8 @@ void loop() {
     const char *path = nombre.c_str();
     ftp.InitFile("Type A");//Inicializamos tipo de archivo
     ftp.NewFile(path);//Creamos archivo
-    for (int j = 0; j < 2000; j++){
-      datosFich[j].toCharArray(datosFichero, 1000);
+    for (int j = 0; j < tam; j++){
+      datosFich[j].toCharArray(datosFichero, 500);
       ftp.Write(datosFichero);
     }
     ftp.CloseFile();//Cerramos
