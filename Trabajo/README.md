@@ -12,3 +12,5 @@ necesarios para las comunicaciones que se definirán más adelante y la algoritm
 - Arabesque: partiendo de la posición base se mantiene un pie en el suelo con toda la planta apoyada y el otro se levanta hacía atrás unos 90º. El cuerpo caerá ligeramente hacia delante.
 - Developpé: partiendo de la posición base se mantiene un pie en el suelo con toda la planta apoyada y el otro se flexiona para después levantarlo 90º hacia delante o hacia un lado.
 - Pirouette: girar únicamente teniendo como base una pierna estirada y la otra flexionada.
+
+![ballet_movements](https://user-images.githubusercontent.com/113996288/207289832-f453353b-033c-454a-8935-5602edbe3862.png)
