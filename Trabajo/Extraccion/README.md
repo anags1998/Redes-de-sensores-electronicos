@@ -3,8 +3,8 @@ Para la extraccion de datos, se ha optado por la creación de ficheros en un ser
 
 Cada dato capturado por el sensor es escrito en el fichero con el instante temporal de ejecucion al inicio de la linea. Se captan, tanto los datos del acelerometro como los del giroscopio de los tres ejes (X, Y y Z). Estos datos se escriben en el fichero separados por ";" para despues poder leerlos desde excel.
 
-![extraccion drawio (1)](https://user-images.githubusercontent.com/113996288/212017354-ff5faca5-46cc-46e0-921e-405ba425d3da.png)
+La imagen muestra el diagrama que sigue el codigo creado para la extraccion de los datos. Cabe mencionar que se recopilan datos cada 20ms, es decir, se muestrea a 50 Hz. Y como se observa en el diagrama, se recopilan datos durante 30s, por lo tanto se obtienen un total de 1500 muestras por cada fichero.
 
-La imagen muestra el diagrama que sigue el codigo creado para la extraccion de los datos.
+![extraccion drawio (1)](https://user-images.githubusercontent.com/113996288/212017354-ff5faca5-46cc-46e0-921e-405ba425d3da.png)
 
 Se ha decidido que cada individuo por paso cree dos ficheros en el servidor, es decir, en total se realizaran 8 repeticiones de cada paso y por cada uno de los cuatro sujetos que forman la base de datos.
