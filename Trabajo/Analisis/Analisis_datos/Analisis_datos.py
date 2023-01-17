@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as geek
 import pandas as pd 
 import numpy as np
+import statistics as stats
 
 directorio = 'C:/Users/anags/OneDrive/Desktop/UNI/cuatri 3/Redes de sensores electronicos/Practicas/Trabajo/Analisis/Datos_en_crudo'
 # Loop through matching files and download each one individually
@@ -34,7 +35,6 @@ def obtener_media(arreglo):
 
 
 def main():
-    print ("+++ 1 ++++")
     datos = []
     ax = []
     ay = []
@@ -95,7 +95,7 @@ def main():
         plt.plot(tiempo, gz,'c--') #g-- indica que pinto en verde y a rayas
         plt.title("Velocidad angular eje Z") #Pongo titulo a la grafica
         
-        nombre = fichero[:-4] + ".jpg"
+        nombre = fichero[:-4] + "_señales.jpg"
         plt.savefig(nombre) #Me lo guardo en un fichero para poder verlo
         plt.show() #La muestro
         
@@ -113,40 +113,86 @@ def main():
         gymediana = obtener_mediana(gy)
         gzmediana = obtener_mediana(gz)
         
-        datosmedia = [axmedia,",",aymedia,",",azmedia,",",gxmedia,",",gymedia,",",gzmedia]
+        axvarianza = stats.pvariance(ax)
+        ayvarianza = stats.pvariance(ay)
+        azvarianza = stats.pvariance(az)
+        gxvarianza = stats.pvariance(gx)
+        gyvarianza = stats.pvariance(gy)
+        gzvarianza = stats.pvariance(gz)
         
-        datosmediana = [axmediana,",",aymediana,",",azmediana,",",gxmediana,",",gymediana,",",gzmediana]
+        axdesv = stats.pstdev(ax)
+        aydesv = stats.pstdev(ay)
+        azdesv = stats.pstdev(az)
+        gxdesv = stats.pstdev(gx)
+        gydesv = stats.pstdev(gy)
+        gzdesv = stats.pstdev(gz)
+        
+        datosmedia = [axmedia,aymedia,azmedia,gxmedia,gymedia,gzmedia]
+        
+        datosmediana = [axmediana,aymediana,azmediana,gxmediana,gymediana,gzmediana]
+        
+        datosvarianza = [axvarianza,ayvarianza,azvarianza,gxvarianza,gyvarianza,gzvarianza]
+        
+        datosdesv = [axdesv,aydesv,azdesv,gxdesv,gydesv,gzdesv]
         
         with open ("datos.txt","a") as f:
-           f.write(str(datosmedia))
-           f.write(str(datosmediana))
+           f.write(fichero[:-4] + '\n')
+           f.write("Media: " + str(datosmedia)+'\n')
+           f.write("Mediana: " + str(datosmediana)+'\n')
+           f.write("Varianza: " + str(datosvarianza)+'\n')
+           f.write("Desviacion: " + str(datosdesv)+'\n')
         f.close()
         
         dataa = pd.DataFrame({'Media' : [axmedia, aymedia, azmedia],
-                     'Mediana': [axmediana, aymediana, azmediana]},
+                     'Mediana': [axmediana, aymediana, azmediana],
+                     'Varianza': [axvarianza, ayvarianza, azvarianza],
+                     'Desviacion': [axdesv, aydesv, azdesv]},
                     index=('ax', 'ay', 'az'))
+        
         datag = pd.DataFrame({'Media' : [ gxmedia, gymedia, gzmedia],
-                     'Mediana': [ gxmediana, gymediana, gzmediana]},
+                     'Mediana': [ gxmediana, gymediana, gzmediana],
+                     'Varianza': [gxvarianza, gyvarianza, gzvarianza],
+                     'Desviacion': [axdesv, aydesv, azdesv]},
                     index=('gx', 'gy', 'gz'))
         
         n = len(dataa.index)
         x = np.arange(n)
         width = 0.25
         
-        plt.figure(figsize =(8,4)) #Pongo tamaño a la figura
-        plt.subplot(1,2,1)
-        plt.bar(x - width, dataa.Media, width=width, label='Media')
-        plt.bar(x, dataa.Mediana, width=width, label='Mediana')
+        plt.figure(figsize =(16,12)) #Pongo tamaño a la figura
+        plt.subplot(3,2,1)
+        plt.bar(x - width, dataa.Media, width=width, label='Media',color = 'pink')
+        plt.bar(x, dataa.Mediana, width=width, label='Mediana',color = 'aquamarine')
         plt.xticks(x, dataa.index)
         plt.legend(loc='best')
         plt.title("Aceleracion") #Pongo titulo a la grafica
        
-        plt.subplot(1,2,2)
-        plt.bar(x - width, datag.Media, width=width, label='Media')
-        plt.bar(x, datag.Mediana, width=width, label='Mediana')
+        plt.subplot(3,2,2)
+        plt.bar(x - width, datag.Media, width=width, label='Media',color = 'pink')
+        plt.bar(x, datag.Mediana, width=width, label='Mediana',color = 'aquamarine')
         plt.xticks(x, datag.index)
         plt.legend(loc='best')
         plt.title("Velocidad angular") #Pongo titulo a la grafica
+        
+        plt.subplot(3,2,3)
+        plt.bar(x - width, dataa.Desviacion, width=width, label='Desviacion',color = 'plum')
+        plt.bar(x, dataa.Varianza, width=width, label='Varianza',color = 'salmon')
+        plt.xticks(x, dataa.index)
+        plt.legend(loc='best')
+        plt.title("Aceleracion") #Pongo titulo a la grafica
+       
+        plt.subplot(3,2,4)
+        plt.bar(x, datag.Varianza, width=width, label='Varianza',color = 'salmon')
+        plt.xticks(x, datag.index)
+        plt.legend(loc='best')
+        plt.title("Velocidad angular") #Pongo titulo a la grafica
+       
+        plt.subplot(3,2,6)
+        plt.bar(x, datag.Desviacion, width=width, label='Desviacion',color = 'plum')
+        plt.xticks(x, datag.index)
+        plt.legend(loc='best')
+        plt.title("Velocidad angular") #Pongo titulo a la grafica
+        
         nombre = fichero[:-4] + "_calculos_estadiscticos.jpg"
         plt.savefig(nombre) #Me lo guardo en un fichero para poder verlo
         plt.show()
