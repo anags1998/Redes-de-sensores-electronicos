@@ -20,8 +20,8 @@ int i;
 #define SCL_PIN 22
 #endif
 
-const char* ssid       = "RSense"; //Nombre de la Red WIFI
-const char* password   = "";      // Contraseña de la Red WIFI
+const char* ssid       = "MIWIFI_2G_HunM"; //Nombre de la Red WIFI
+const char* password   = "mJseX7mv";      // Contraseña de la Red WIFI
 
 const char* ntpServer = "pool.ntp.org"; //Servidor NTP
 const long  gmtOffset_sec = 3600; //UTC +1.00 : 1 * 60 * 60 : 3600
@@ -80,7 +80,7 @@ void setup() {
   
   //Comenzar conexión con servidor FTP
   ftp.OpenConnection();
-  ftp.ChangeWorkDir("/rsense/847048");//Cambiamos directorio en el servidor
+  ftp.ChangeWorkDir("/rsense/847048/trabajo");//Cambiamos directorio en el servidor
 
 }
 
@@ -121,7 +121,7 @@ void printLocalTime(){
     Serial.println("Failed to obtain time");
     return;
   }
-  strftime(fecha,50, "%A, %B %d %Y %H:%M:%S",&timeinfo); // Escribo, lo obtenido:
+  strftime(fecha,50, "%A,_%B_%d_%Y_%H:%M:%S",&timeinfo); // Escribo, lo obtenido:
                                                       // A: día de la semana
                                                       // B: mes
                                                       // d: día del mes
