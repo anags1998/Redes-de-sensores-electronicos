@@ -121,7 +121,7 @@ void printLocalTime(){
     Serial.println("Failed to obtain time");
     return;
   }
-  strftime(fecha,50, "%A,_%B_%d_%Y_%H:%M:%S",&timeinfo); // Escribo, lo obtenido:
+  strftime(fecha,50, "%A,%B_%d_%Y_%H_%M_%S",&timeinfo); // Escribo, lo obtenido:
                                                       // A: día de la semana
                                                       // B: mes
                                                       // d: día del mes
