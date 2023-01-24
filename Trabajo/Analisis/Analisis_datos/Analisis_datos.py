@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 import statistics as stats
 
-directorio = 'C:/Users/anags/OneDrive/Desktop/UNI/cuatri 3/Redes de sensores electronicos/Practicas/Trabajo/Analisis/Datos_en_crudo'
+directorio = 'C:/Users/anags/OneDrive/Desktop/UNI/cuatri 3/Redes de sensores electronicos/Practicas/Trabajo/Analisis/Datos_en_crudo/1'
 # Loop through matching files and download each one individually
 contenido = os.listdir(directorio)
 
@@ -113,19 +113,19 @@ def main():
         gymediana = obtener_mediana(gy)
         gzmediana = obtener_mediana(gz)
         
-        axvarianza = stats.pvariance(ax)
-        ayvarianza = stats.pvariance(ay)
-        azvarianza = stats.pvariance(az)
-        gxvarianza = stats.pvariance(gx)
-        gyvarianza = stats.pvariance(gy)
-        gzvarianza = stats.pvariance(gz)
+        axvarianza = stats.variance(ax)
+        ayvarianza = stats.variance(ay)
+        azvarianza = stats.variance(az)
+        gxvarianza = stats.variance(gx)
+        gyvarianza = stats.variance(gy)
+        gzvarianza = stats.variance(gz)
         
-        axdesv = stats.pstdev(ax)
-        aydesv = stats.pstdev(ay)
-        azdesv = stats.pstdev(az)
-        gxdesv = stats.pstdev(gx)
-        gydesv = stats.pstdev(gy)
-        gzdesv = stats.pstdev(gz)
+        axdesv = stats.stdev(ax)
+        aydesv = stats.stdev(ay)
+        azdesv = stats.stdev(az)
+        gxdesv = stats.stdev(gx)
+        gydesv = stats.stdev(gy)
+        gzdesv = stats.stdev(gz)
         
         datosmedia = [axmedia,aymedia,azmedia,gxmedia,gymedia,gzmedia]
         
