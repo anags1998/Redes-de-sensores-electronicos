@@ -7,7 +7,7 @@ De todos los datos obtenidos y de los algoritmos probados, se ha determinado que
 
 Se ha concluido que de todos ellos los parametros que mas informacion nos dan son la varianza y la desviacion de cada señal obtenida. En consecuencia, se han realizado pruebas más concretas con el codigo final del trabajo para poder determinar el rango exacto de cada uno de los parametros para la diferenciacion de los pasos.
 
-A continuacion se muestran un par de graficas obtenidas por cada tipo de dato, la primera muentra las señales de cada uno de los ejes de la aceleracion y la velocidad angular, y la segunda muestra los parametros estadisticos calculados:
+A continuacion se muestran un par de graficas obtenidas por cada tipo de dato, la primera muentra las señales de cada uno de los ejes de la aceleracion y la velocidad angular, y la segunda muestra los parametros estadisticos calculados. Se puede observar en estas graficas como otra manera de diferenciar el paso realizado seria mirar directamente las graficas, pero se ha descartado dicha opcion por necesidad del usuario de conocer las graficas resultantes.
 
 1. Demi-Plie
 ![Monday,January_23_2023_09_15_48_señales](https://user-images.githubusercontent.com/113996288/214261668-2ef25bf1-cc7f-4666-90b1-0171b014ece0.jpg)
