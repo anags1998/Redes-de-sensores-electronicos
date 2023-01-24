@@ -3,7 +3,7 @@ Para el analisis de datos como ya se mencionó, se han recopilado los datos de c
 
 Posteriormente se ha creado un programa que permite obtener las señales de aceleracion y velocidad angular de los tres ejes (x, y, z) de cada uno de los archivos, ademas de la media, mediana, varianza y desviacion de cada una de ellas. Estos ultimos calculos estadisticos se almacenan despues en un fichero "datos.txt" para poder analizarlo, ademas de graficarse tambien. Todo esto se encuentra almacenado en la carpeta "Analisis_datos".
 
-De todos los datos obtenidos y de los algoritmos probados, se ha determinado que la diferenciacion de los nueve pasos propuestos necesita algoritmos mucho mas robustos. Por lo tanto, se han decidido determinar cuatro pasos (Demi-Plie, Saute, Releve y Arabesque).
+De todos los datos obtenidos y de los algoritmos probados, se ha determinado que la diferenciacion de los nueve pasos propuestos necesita algoritmos mucho mas robustos. Por lo tanto, se han decidido determinar cuatro pasos (Demi-Plie, Saute, Releve y Arabesque). Se han elegido estos, ya que son los que se obtienen parametros estadisticos mas dispares y por lo tanto facilita el uso de un algoritmo menos robusto. 
 
 Se ha concluido que de todos ellos los parametros que mas informacion nos dan son la varianza y la desviacion de cada señal obtenida. En consecuencia, se han realizado pruebas más concretas con el codigo final del trabajo para poder determinar el rango exacto de cada uno de los parametros para la diferenciacion de los pasos.
 
