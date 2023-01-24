@@ -7,15 +7,18 @@
 #include <MPU9250_asukiaaa.h>
 #include <Statistics.h>
 #include "QuickMedianLib.h"
+#include "ESPAsyncWebServer.h"
+#include "SPIFFS.h"
 
+//Inicializamos para poder realizar calculos estadisticos
 Statistics st = Statistics();
 
 //Defino boton para inicio
 #define BUTTON_PIN 36
 
-// Variables will change:
-int lastState = HIGH; // the previous state from the input pin
-int currentState;     // the current reading from the input pin
+// Variables para el cambio de estado de boton
+int lastState = HIGH; // el estado anterior
+int currentState;     // estado actual
 int i;
 
 // Definimos los pines del I2C
@@ -24,6 +27,7 @@ int i;
 #define SCL_PIN 22
 #endif
 
+//Definimos los parametros de la red WiFi
 const char* ssid       = "MIWIFI_2G_HunM"; //Nombre de la Red WIFI
 const char* password   = "mJseX7mv";      // Contraseña de la Red WIFI
 
@@ -32,8 +36,6 @@ WiFiClient client; // Declarar un objeto cliente para conectarse al servidor
 //Variables para las aceleraciones de los 3 ejes y una de tipo sensor
 MPU9250_asukiaaa mySensor;
 const int tam = 500;
-String datos;
-String datosFich[tam];
 String aX, aY, aZ, gX, gY, gZ;
 float datosaX[500];
 float datosaY[500];
@@ -49,13 +51,24 @@ float statsgX[4];
 float statsgY[4];
 float statsgZ[4];
 
-int cont = 0;
 uint8_t sensorId;
 int result;
 
+//Parametro para mandar a la pagina web
+String paso = "";
+
+// Objeto AsyncWebServer para crear el servidor
+AsyncWebServer server(80);
+
+// Reemplaza el marcador del valor del paso por el actual 
+String processor(const String& var){
+  if(var == "PASO"){
+    return paso; //Reemplazamos por este valor
+  }
+  return String();
+}
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(115200);
   pinMode(BUTTON_PIN, INPUT_PULLUP);
   
@@ -68,8 +81,14 @@ void setup() {
   
   mySensor.beginGyro();//Arrancamos las medidas del giroscopio
 
+  // Inicializo SPIFFS que es un sistema de archivos diseñado para funcionar en memorias flash conectadas
+  //por SPI en dispositivos embebidos y con poca cantidad de RAM.
+  if(!SPIFFS.begin(true)){
+    Serial.println("An Error has occurred while mounting SPIFFS");
+    return;
+  }
   
-  //connect to WiFi
+  //Me conecto al WiFi
   Serial.printf("Conectando a %s ", ssid);
   Serial.println("");
   WiFi.begin(ssid, password); //Intento conectarme indicando el usuario y la contraseña
@@ -79,19 +98,42 @@ void setup() {
   }
   
   Serial.println("Conectado a la red"); //Conectado
- 
+  // Printeo la direacción IP local del ESP32 
+  Serial.println(WiFi.localIP());
+  
+  // Ruta para la pagina web
+  //Cuando el servidor recibe solicitud en la URL raíz "/" enviará el archivo index.html al cliente y 
+  //sustituira el valor del marcador por el paso actual dado que llamamos a la funcion processor
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/index.html", String(), false, processor);
+  });
+  
+  // Ruta para cargar el archivo style.css 
+  //Como se hace referencia al archivo .css en el .html el cliente realiza petición para el archivo
+  //y el servidor envía el archivo style.css cuando eso sucede  
+  server.on("/style.css", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/style.css", "text/css");
+  });
+  // Ruta para actualizar el paso
+  //Cuando el servidor recibe solicitud en la URL "/paso" enviará el archivo index.html al cliente y 
+  //sustituira el valor del marcador por el apso actual dado que llamamos a la funcion processor
+  server.on("/paso", HTTP_GET, [](AsyncWebServerRequest *request){
+    request->send(SPIFFS, "/index.html", String(), false, processor);
+  });
+  
+  // Arrancamos servidor para que escuche a los clientes
+  server.begin();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  //Leemos el estado actual del boton
   currentState = digitalRead(BUTTON_PIN);
   
   if(lastState == LOW && currentState == HIGH){
     Serial.println("The state changed from LOW to HIGH");
     for( i = 0; i <tam ; i++){
-      //Serial.println(millis());
-      leerDatosSensor();
-      //Serial.println(millis());
+      leerDatosSensor(); //Leemos datos del sensor con una frecuencia de muestreo de 50Hz
+      
     }
     for( int j = 0; j <tam ; j++){
       st.add(datosaX[j]);
@@ -146,18 +188,10 @@ void loop() {
     statsgZ[1] = QuickMedian<float>::GetMedian(datosgZ, valueslen);
     statsgZ[2] = st.var();
     statsgZ[3] = st.std();
-    
-    for(int k = 2; k <4 ; k++){
-      Serial.println(k);
-      Serial.println(statsgX[k]);
-      Serial.println(statsgY[k]);
-      Serial.println(statsgZ[k]);  
-    }
+ 
     determinarPaso();
   }
  
-  //save the last state
-  cont = 0;
   st.reset();
   lastState = currentState;
 }
@@ -166,14 +200,19 @@ void loop() {
 void determinarPaso(){
   if((statsgX[2]<25.00)&(statsgY[2]<75.00)&(statsgZ[2]<25.00)&(statsgX[3]<5.00)&(statsgY[3]<7.00)&(statsgZ[3]<5.00)){
     Serial.println("Demi-Plie");
+    paso = "Demi-Plie";
   }else if((150.00<statsgX[2])&(statsgX[2]<500.00)&(200.00<statsgY[2])&(statsgY[2]<600.00)&(100.00<statsgZ[2])&(statsgZ[2]<500.00)&(14.00<statsgX[3])&(statsgX[3]<25.00)&(14.00<statsgY[3])&(statsgY[3]<25.00)&(12.00<statsgZ[3])&(statsgZ[3]<25.00)){
     Serial.println("Saute");
+    paso = "Saute";
   }else if((20.00<statsgX[2])&(statsgX[2]<150.00)&(75.00<statsgY[2])&(statsgY[2]<250.00)&(15.00<statsgZ[2])&(statsgZ[2]<80.00)&(6.00<statsgX[3])&(statsgX[3]<11.00)&(9.00<statsgY[3])&(statsgY[3]<16.00)&(4.00<statsgZ[3])&(statsgZ[3]<15.00)){
     Serial.println("Releve");
+    paso = "Releve";
   }else if((100.00<statsgX[2])&(statsgX[2]<400.00)&(140.00<statsgY[2])&(statsgY[2]<300.00)&(500.00<statsgZ[2])&(statsgZ[2]<1100.00)&(12.00<statsgX[3])&(statsgX[3]<20.00)&(12.00<statsgY[3])&(statsgY[3]<17.00)&(20.00<statsgZ[3])&(statsgZ[3]<35.00)){
     Serial.println("Arabesque");
+    paso = "Arabesque";
   }else{
     Serial.println("Indeterminado");
+    paso = "Indeterminado";
   }
   
 }
@@ -203,14 +242,12 @@ void leerDatosSensor(){
     Serial.println("Cannot read gyro values " + String(result));
   }
  
-
   datosaX[i] = aX.toFloat();
   datosaY[i] = aY.toFloat();
   datosaZ[i] = aZ.toFloat();
   datosgX[i] = gX.toFloat();
   datosgY[i] = gY.toFloat();
   datosgZ[i] = gZ.toFloat();
-  
   
   delay(17);
   
