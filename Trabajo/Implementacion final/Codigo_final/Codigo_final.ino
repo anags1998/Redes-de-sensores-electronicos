@@ -188,7 +188,11 @@ void loop() {
     statsgZ[1] = QuickMedian<float>::GetMedian(datosgZ, valueslen);
     statsgZ[2] = st.var();
     statsgZ[3] = st.std();
- 
+    for(int k = 2; k <4; k++){
+      Serial.println(statsgX[k]);
+      Serial.println(statsgY[k]);
+      Serial.println(statsgZ[k]);
+    }
     determinarPaso();
   }
  
